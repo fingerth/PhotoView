@@ -204,10 +204,8 @@ public class PhotoViewAttacher implements View.OnTouchListener,
                 if (displayRect != null) {
                     // Check to see if the user tapped on the photo
                     if (displayRect.contains(x, y)) {
-                        float xResult = (x - displayRect.left)
-                            / displayRect.width();
-                        float yResult = (y - displayRect.top)
-                            / displayRect.height();
+                        float xResult = (x - displayRect.left) / displayRect.width();
+                        float yResult = (y - displayRect.top) / displayRect.height();
                         if (mPhotoTapListener != null) {
                             mPhotoTapListener.onPhotoTap(mImageView, xResult, yResult);
                         }
@@ -628,7 +626,13 @@ public class PhotoViewAttacher implements View.OnTouchListener,
             }
             switch (mScaleType) {
                 case FIT_CENTER:
-                    mBaseMatrix.setRectToRect(mTempSrc, mTempDst, ScaleToFit.CENTER);
+                    //mBaseMatrix.setRectToRect(mTempSrc, mTempDst, ScaleToFit.CENTER);
+                    if (drawableWidth < drawableHeight && drawableHeight > drawableWidth * 2) {
+                        float mutiple = (float) AppUtils.getScreenWidth(mImageView.getContext()) / ((float) drawableWidth);
+                        mBaseMatrix.postScale(mutiple, mutiple);
+                    } else {
+                        mBaseMatrix.setRectToRect(mTempSrc, mTempDst, ScaleToFit.CENTER);
+                    }
                     break;
                 case FIT_START:
                     mBaseMatrix.setRectToRect(mTempSrc, mTempDst, ScaleToFit.START);
